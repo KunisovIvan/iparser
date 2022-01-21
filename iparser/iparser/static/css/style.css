@@ -1,0 +1,177 @@
+#hour,#mins,#secs {
+display: inline-block;
+padding: 12px 5px;
+}
+
+h1, h2, h3, h4, h5 {
+margin-block-start: 0.3em;
+margin-block-end: 0.3em;
+}
+
+.container {
+    width: 95%;
+    margin: 0 auto;
+}
+
+.intro {
+    width: 90%;
+    height: 100vh;
+    margin-top: 70px;
+}
+
+.header {
+    width: 100%;
+    background: #f0f4f5d6;
+    border: solid;
+    border-width: 1px;
+    border-color: #dce0e0;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.header__logo {
+    font-family: "KaushanScript";
+    font-weight: 700;
+    font-size: 16px;
+
+}
+
+a {
+text-decoration:none;
+color: black;
+}
+
+.header__inner {
+    height: 50px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+.content-box {
+    font-family: "RobotoSlab";
+    font-size: 14px;
+    background: #f0f4f5d6;
+    border: solid;
+    border-width: 1px;
+    border-color: #dce0e0;
+    border-radius: 10px;
+    margin-block-start: 0.3em;
+    margin-block-end: 0.3em;
+}
+
+.content-text {
+    margin-block-start: 0.3em;
+    margin-block-end: 0.3em;
+    font-family: "KaushanScript";
+    font-size: 20px;
+}
+
+img {
+    margin: 11px 11px;
+}
+
+form.level {
+    height: 50px;
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    font-size: 14px;
+    width: 80%;
+}
+
+.errorlist {
+    color: red;
+}
+
+.errorbox {
+    display: table-cell;
+    vertical-align: middle;
+    background-color: #f7bebe;
+    border: solid;
+    border-width: 1px;
+    border-color: #f7a6a6;
+    border-radius: 5px;
+    width: 10%;
+}
+
+.errortext {
+    color: #824f4f;
+    font-size: 14px;
+    margin-block-start: 0.3em;
+    margin-block-end: 0.3em;
+}
+
+.successbox {
+    font-family: "RobotoSlab";
+    font-size: 14px;
+    background-color: #b9e0a6;
+    border: solid;
+    border-width: 1px;
+    border-color: #dce0e0;
+    border-radius: 10px;
+    margin-block-start: 0.3em;
+    margin-block-end: 0.3em;
+}
+
+.successtext {
+    color: #4e6344;
+    font-size: 14px;
+    margin-block-start: 0.3em;
+    margin-block-end: 0.3em;
+}
+
+input, textarea {
+      width: 102%;
+      padding: 12px 20px;
+      margin: 2px 0;
+      box-sizing: border-box;
+      border-radius: 5px;
+}
+
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border: 3px solid #dce0e0;
+}
+
+button {
+      width: 102%;
+      padding: 8px 20px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      background: #f0f4f5d6;
+}
+
+button.level {
+      width: 10%;
+      border-radius: 0 5px 5px 0;
+}
+
+
+input[type="checkbox"]:checked,
+input[type="checkbox"]:not(:checked) {
+    width: 10%;
+}
+
+input[type="file"] {
+    width: 40%;
+}
+
+@font-face{
+    font-family: "RobotoSlab";
+    src: url('../fonts/RobotoSlab.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: "KaushanScript";
+    src: url('../fonts/KaushanScript.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

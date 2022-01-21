@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="content-text">Введите username для парсинга подписчиков</div>
+<form method="post" class="level">
+    {% csrf_token %}
+    {{form_username.as_p}}
+    <button type="submit" class="level"><div class="header__logo">OK</div></button>
+</form>
+
+{% endblock %}

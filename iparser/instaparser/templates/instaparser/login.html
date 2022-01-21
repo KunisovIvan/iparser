@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h3>Авторизация</h3>
+
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <button type="submit"><div class="header__logo">Login</div></button>
+</form>
+<form action="{% url 'register' %}">
+{% endblock %}

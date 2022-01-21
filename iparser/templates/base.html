@@ -1,0 +1,60 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Iparser</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+<body>
+
+<header class="header">
+    <div class="container">
+        <div class="header__inner">
+
+                <div class="header__logo"><a href="{% url 'home' %}"><h2>Iparser</h2></a></div>
+            <nav class="nav">
+                {% if request.user.is_authenticated %}
+                <h3>
+                    <div class="header__logo">{{ user.username }}  |
+                    <a href="{% url 'logout' %}" class="nav__link">Exit</a></div>
+                </h3>
+                {% endif %}
+            </nav>
+
+        </div>
+    </div>
+</header>
+
+<center>
+<div class="intro">
+    <div class="container__for">
+
+        {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                        <div class="errorbox">
+                            <div class="errortext">{{ message }}</div>
+                        </div>
+                        {% else %}
+                            <div class="successbox">
+                            <div class="successtext">{{ message }}</div>
+                        </div>
+                        {% endif%}
+                    {% endfor %}
+        {% endif%}
+
+
+        {% block content %}
+        {% endblock %}
+
+
+
+        </div>
+    </div>
+</center>
+</body>
+</html>

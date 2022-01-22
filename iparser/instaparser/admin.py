@@ -14,6 +14,7 @@ class DataAdmin(admin.ModelAdmin):
 
     list_display = [
         'id',
+        'task_for_parse',
         'username',
         'full_name',
         'biography',

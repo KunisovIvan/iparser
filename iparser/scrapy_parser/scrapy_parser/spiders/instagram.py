@@ -10,7 +10,7 @@ class InstagramSpider(scrapy.Spider):
     name = 'instagram'
     allowed_domains = ['instagram.com']
     start_urls = ['https://www.instagram.com/']
-    username = "89588563366"
+    username = "kunisov.ivan@mail.ru"
     enc_password = "#PWD_INSTAGRAM_BROWSER:10:1641500673:AcJQALZs9Sduqn9AajBDD19RGB0DYvFMVIVu+2EZMoTei0B+5e0BAbJp" \
                    "5gZsDyptPDInF4eMozIYIjgVKasMLbZS7MGShCvmh9pKX+Bg1zcpIZNt2JX0T1/nlZ/QxsIA25gvM+uXN9l3ALD6"
     login_url = "https://www.instagram.com/accounts/login/ajax/"

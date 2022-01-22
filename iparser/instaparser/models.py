@@ -6,15 +6,17 @@ class TaskForParse(models.Model):
     """Модель задач на парсинг."""
 
     class Status(models.TextChoices):
-        WAITING = 'waiting', 'Ожидает'
-        IN_PROGRESS = 'in_progress', 'В процессе'
-        DONE = 'done', 'Выполнен'
+        WAITING = 'waiting', 'задача на проверке'
+        IN_PROGRESS = 'in_progress', 'задача выполняется'
+        DONE = 'done', 'задача выполнена'
+        ERROR = 'error', 'ошибка при выполнении'
 
     user = models.ForeignKey(User, related_name='task_for_parse', verbose_name='Пользователь',
                              on_delete=models.CASCADE)
     user_to_scrape = models.CharField(max_length=255, verbose_name='Аккаунт для парсинга')
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.WAITING,
                               verbose_name='Статус')
+    file = models.FileField(verbose_name='', upload_to='file/%Y/%m/%d/', blank=True)
     created_at = models.DateTimeField(verbose_name='Дата и время создания', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='Дата и время обновления', auto_now=True)
 

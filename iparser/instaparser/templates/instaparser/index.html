@@ -4,10 +4,116 @@
 {% block content %}
 
 <div class="content-text">Введите username для парсинга подписчиков</div>
+
+<p>
 <form method="post" class="level">
     {% csrf_token %}
     {{form_username.as_p}}
-    <button type="submit" class="level"><div class="header__logo">OK</div></button>
+    <button type="submit" class="level"><div class="header__logo">START PARSING</div></button>
 </form>
+</p>
 
+{% for key, value in file_list.items %}
+    {% if key.file %}
+        <p>
+            <a class="file-name" href="{{key.file.url}}" download>
+                {{ value }}
+                <span class="file-size">
+                    ({{ key.file.size }}байт)
+                </span>
+            </a>
+        </p>
+    {% else %}
+        <p>
+            <div class="task-{{ key.status }}">
+                <div class="task-text">
+                    {{ key.user_to_scrape}} {{ key.get_status_display}}
+                </div>
+            </div>
+        </p>
+    {% endif %}
+{% endfor %}
+
+    {% if data %}
+    <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+
+                            </h6>
+                            <ul class="pagination">
+
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>ФИО</th>
+                                            <th>Описание профиля</th>
+                                            <th>Приватный ли аккаунт</th>
+                                            <th>Кол-во подписчиков</th>
+                                            <th>Кол-во подписок</th>
+                                            <th>Кол-во подписок на теги</th>
+                                            <th>Кол-во публикаций</th>
+                                            <th>Кол-во тегов пользователя</th>
+                                            <th>Телефон</th>
+                                            <th>Email</th>
+                                            <th>Whatsapp</th>
+                                            <th>Способ связи</th>
+                                            <th>id геолокации</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>ФИО</th>
+                                            <th>Описание профиля</th>
+                                            <th>Приватный ли аккаунт</th>
+                                            <th>Кол-во подписчиков</th>
+                                            <th>Кол-во подписок</th>
+                                            <th>Кол-во подписок на теги</th>
+                                            <th>Кол-во публикаций</th>
+                                            <th>Кол-во тегов пользователя</th>
+                                            <th>Телефон</th>
+                                            <th>Email</th>
+                                            <th>Whatsapp</th>
+                                            <th>Способ связи</th>
+                                            <th>id геолокации</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for item in data %}
+                                            <tr>
+                                                <td>{{ item.username }}</td>
+                                                <td>{{ item.full_name }}</td>
+                                                <td>{{ item.biography }}</td>
+                                                <td>{{ item.is_private }}</td>
+                                                <td>{{ item.follower_count }}</td>
+                                                <td>{{ item.following_count }}</td>
+                                                <td>{{ item.following_tag_count }}</td>
+                                                <td>{{ item.media_count }}</td>
+                                                <td>{{ item.usertags_count }}</td>
+                                                <td>{{ item.contact_phone_number }}</td>
+                                                <td>{{ item.public_email }}</td>
+                                                <td>{{ item.whatsapp_number }}</td>
+                                                <td>{{ item.business_contact_method }}</td>
+                                                <td>{{ item.instagram_location_id }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                            <div class="card-footer py-3">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    {% endif %}
 {% endblock %}

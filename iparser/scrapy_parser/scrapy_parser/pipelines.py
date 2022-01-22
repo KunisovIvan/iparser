@@ -7,6 +7,9 @@ class ScrapyParserPipeline:
 
         task_for_parse = TaskForParse.objects.filter(user_to_scrape=item.get("user_to_scrape")).first()
 
+        if item.get('instagram_location_id') == '':
+            item['instagram_location_id'] = 0
+
         Data.objects.create(
             task_for_parse=task_for_parse,
             username=item.get('username'),

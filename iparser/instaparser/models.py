@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class TaskForParse(models.Model):
@@ -16,7 +17,7 @@ class TaskForParse(models.Model):
     user_to_scrape = models.CharField(max_length=255, verbose_name='Аккаунт для парсинга')
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.WAITING,
                               verbose_name='Статус')
-    file = models.FileField(verbose_name='', upload_to='file/%Y/%m/%d/', blank=True)
+    file = models.FileField(verbose_name='', upload_to='file/', blank=True, null=True)
     created_at = models.DateTimeField(verbose_name='Дата и время создания', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='Дата и время обновления', auto_now=True)
 
@@ -26,6 +27,9 @@ class TaskForParse(models.Model):
     class Meta:
         verbose_name = 'Задача на парсинг'
         verbose_name_plural = 'Задачи на парсинг'
+
+    def get_absolute_url(self):
+        return reverse('task', kwargs={'task_id': self.pk})
 
 
 class Data(models.Model):
@@ -57,3 +61,18 @@ class Data(models.Model):
     class Meta:
         verbose_name = 'Cпаршеные данные'
         verbose_name_plural = 'Cпаршеные данные'
+
+
+class InstagramAccount(models.Model):
+    """Модель аккаунтов instagram."""
+
+    username = models.CharField(max_length=255, verbose_name='Username')
+    enc_password = models.CharField(max_length=255, verbose_name='Хэш пароля')
+    is_used = models.BooleanField(verbose_name='Отработал ли аккаунт', default=False)
+
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        verbose_name = 'Аккаунт instagram'
+        verbose_name_plural = 'Аккаунты instagram'

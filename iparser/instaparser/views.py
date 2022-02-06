@@ -1,4 +1,3 @@
-from django.db.models import QuerySet
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
@@ -22,10 +21,64 @@ def index(request):
 
         if form_username.is_valid():
             user_to_scrape = form_username.cleaned_data['username'].lower()
-            TaskForParse.objects.create(
+            task_for_parse, is_created = TaskForParse.objects.get_or_create(
                 user=user,
                 user_to_scrape=user_to_scrape,
             )
+
+            if not is_created:
+                task_for_parse.status = TaskForParse.Status.WAITING
+                task_for_parse.file = None
+                task_for_parse.save()
+                task_for_parse.data_from_parse.all().delete()
+            return redirect('home')
+    else:
+        form_username = UsernameForm()
+        task_for_parse = TaskForParse.objects.filter(user=user)
+        file_list = {}
+
+        if task_for_parse:
+            file_list = {x: x.file.name[5:] for x in task_for_parse}
+
+        if task_for_parse:
+            file_list = {x: x.file.name[5:] for x in task_for_parse}
+
+            task = task_for_parse.filter(data_from_parse__isnull=False).latest('created_at')
+            if task:
+                data = task.data_from_parse.all().order_by('-pk')
+
+    return render(request, 'instaparser/index.html',
+                  {
+                      'form_username': form_username,
+                      'file_list': file_list,
+                      'data': data,
+                   })
+
+
+def task(request, task_id):
+    """Функция, для ренда шаблона по task-ам"""
+
+    user = request.user
+
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if request.method == 'POST':
+
+        form_username = UsernameForm(data=request.POST)
+
+        if form_username.is_valid():
+            user_to_scrape = form_username.cleaned_data['username'].lower()
+            task_for_parse, is_created = TaskForParse.objects.get_or_create(
+                user=user,
+                user_to_scrape=user_to_scrape,
+            )
+
+            if not is_created:
+                task_for_parse.status = TaskForParse.Status.WAITING
+                task_for_parse.file = None
+                task_for_parse.save()
+                task_for_parse.data_from_parse.all().delete()
             return redirect('home')
     else:
         form_username = UsernameForm()
@@ -34,13 +87,11 @@ def index(request):
         data = None
 
         if task_for_parse:
-            file_list = {x: x.file.name[16:] for x in task_for_parse}
-            print('file_list-> ', file_list)
+            file_list = {x: x.file.name[5:] for x in task_for_parse}
 
-            task_latest = task_for_parse.latest('created_at')
-            if task_latest:
-                data = task_latest.data_from_parse.all().order_by('-pk')
-                print('data-> ', data)
+            task = task_for_parse.filter(pk=task_id).first()
+            if task:
+                data = task.data_from_parse.all().order_by('-pk')
 
     return render(request, 'instaparser/index.html',
                   {

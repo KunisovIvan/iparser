@@ -92,12 +92,14 @@ button.level {
 .task-waiting {
     display: table-cell;
     vertical-align: middle;
-    background-color: #2D7FFB;
+    background-color: gray;
     border: solid;
     border-width: 1px;
-    border-color: #2D7FFB;
+    border-color: gray;
     border-radius: 5px;
     width: 25em;
+    width: 25em;
+    height: 3em;
 }
 
 .task-in_progress {
@@ -109,6 +111,35 @@ button.level {
     border-color: #2D7FFB;
     border-radius: 5px;
     width: 25em;
+    width: 25em;
+    height: 3em;
+
+}
+
+.task-error {
+    display: table-cell;
+    vertical-align: middle;
+    background-color: red;
+    border: solid;
+    border-width: 1px;
+    border-color: red;
+    border-radius: 5px;
+    width: 25em;
+    width: 25em;
+    height: 3em;
+}
+
+.task-done {
+    display: table-cell;
+    vertical-align: middle;
+    background-color: green;
+    border: solid;
+    border-width: 1px;
+    border-color: green;
+    border-radius: 5px;
+    width: 25em;
+    width: 25em;
+    height: 3em;
 }
 
 .task-text {
@@ -182,6 +213,7 @@ input[type="file"] {
 
 .file-name {
    color: blue;
+   font-size: 18px;
 }
 
 .register__link {

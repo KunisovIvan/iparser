@@ -14,24 +14,26 @@
 </p>
 
 {% for key, value in file_list.items %}
-    {% if key.file %}
-        <p>
-            <a class="file-name" href="{{key.file.url}}" download>
-                {{ value }}
-                <span class="file-size">
-                    ({{ key.file.size }}байт)
-                </span>
-            </a>
-        </p>
-    {% else %}
-        <p>
-            <div class="task-{{ key.status }}">
-                <div class="task-text">
-                    {{ key.user_to_scrape}} {{ key.get_status_display}}
+
+
+            <p>
+                <div class="task-{{ key.status }}">
+                        <a class="task-text" href="{{ key.get_absolute_url }}">
+                        {{ key.user_to_scrape}} {{ key.get_status_display}}
+                        </a>
                 </div>
-            </div>
-        </p>
-    {% endif %}
+
+            {% if key.file %}
+                <a class="file-name" href="{{key.file.url}}" download>
+                    {{ value }}
+                    <span class="file-size">
+                        ({{ key.file.size }}байт)
+                    </span>
+                </a>
+            {% endif %}
+            </p>
+
+
 {% endfor %}
 
     {% if data %}
@@ -52,6 +54,7 @@
                                 <table class="table table-bordered" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>№</th>
                                             <th>Username</th>
                                             <th>ФИО</th>
                                             <th>Описание профиля</th>
@@ -70,6 +73,7 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
+                                            <th>№</th>
                                             <th>Username</th>
                                             <th>ФИО</th>
                                             <th>Описание профиля</th>
@@ -89,6 +93,7 @@
                                     <tbody>
                                         {% for item in data %}
                                             <tr>
+                                                <td>{{ forloop.revcounter }}</td>
                                                 <td>{{ item.username }}</td>
                                                 <td>{{ item.full_name }}</td>
                                                 <td>{{ item.biography }}</td>

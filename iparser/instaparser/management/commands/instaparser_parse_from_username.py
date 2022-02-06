@@ -76,7 +76,9 @@ class Command(BaseCommand):
             'id геолокации': instagram_location_id_list,
         })
 
-        df.to_excel(f'iparser/media/file/{task.user_to_scrape}.xlsx')
+        df.to_excel(f'media/file/{task.user_to_scrape}.xlsx')
 
-        f = open(f'iparser/media/file/{task.user_to_scrape}.xlsx', 'rb')
-        task.file.save(f'{task.user_to_scrape}.xlsx', File(f))
+        # f = open(f'media/file/{task.user_to_scrape}.xlsx', 'rb')
+        # task.file.save(f'{task.user_to_scrape}.xlsx', File(f))
+        task.file.name = f'file/{task.user_to_scrape}.xlsx'
+        task.save()

@@ -1,12 +1,20 @@
 from django.contrib import admin
 
-from instaparser.models import TaskForParse, Data
+from instaparser.models import TaskForParse, Data, InstagramAccount
 
 
 class TaskForParseAdmin(admin.ModelAdmin):
     """Выводить модель TaskForParse"""
 
-    list_display = ['user', 'user_to_scrape', 'status', 'created_at', 'updated_at']
+    list_display = ['id', 'user', 'user_to_scrape', 'status', 'file', 'created_at', 'updated_at']
+    list_editable = ['status', 'file']
+
+
+class InstagramAccountAdmin(admin.ModelAdmin):
+    """Выводить модель InstagramAccount"""
+
+    list_display = ['id', 'username', 'is_used']
+    list_editable = ['is_used', ]
 
 
 class DataAdmin(admin.ModelAdmin):
@@ -34,3 +42,4 @@ class DataAdmin(admin.ModelAdmin):
 
 admin.site.register(TaskForParse, TaskForParseAdmin)
 admin.site.register(Data, DataAdmin)
+admin.site.register(InstagramAccount, InstagramAccountAdmin)

@@ -6,14 +6,15 @@ from instaparser.models import TaskForParse, Data, InstagramAccount
 class TaskForParseAdmin(admin.ModelAdmin):
     """Выводить модель TaskForParse"""
 
-    list_display = ['id', 'user', 'user_to_scrape', 'status', 'file', 'created_at', 'updated_at']
+    list_display = ['id', 'user', 'user_to_scrape', 'count_parse_data', 'status', 'file',
+                    'next_max_id', 'type_of_parse']
     list_editable = ['status', 'file']
 
 
 class InstagramAccountAdmin(admin.ModelAdmin):
     """Выводить модель InstagramAccount"""
 
-    list_display = ['id', 'username', 'is_used']
+    list_display = ['id', 'username', 'is_used', 'used_at', 'enc_password']
     list_editable = ['is_used', ]
 
 

@@ -1,1 +1,1 @@
-* * * * * cd /var/www/u1563375/data && /var/www/u1563375/data/venv/bin/python /var/www/u1563375/data/www/exit-exist.ru/manage.py instaparser_parse_from_username >> instaparser_parse_from_username.log 2>&1
+* * * * * /home/ivan/Project/Iparser/venv/bin/python /home/ivan/Project/Iparser/iparser/manage.py instaparser_parse_from_username >> instaparser_parse_from_username.log 2>&1

@@ -42,6 +42,18 @@ color: black;
     justify-content: space-between;
     font-size: 14px;
 }
+
+.form-parse {
+    align-items: center;
+    display: flex;
+    font-size: 14px;
+}
+
+.type_of_parse {
+    padding: 1em;
+    float: right;
+}
+
 .content-box {
     font-family: "RobotoSlab";
     font-size: 14px;
@@ -66,12 +78,15 @@ img {
 }
 
 form.level {
-      width: 25em;
+      width: 80%;
       border-radius: 5px;
+      padding-block-end: 7em;
 }
 
 button.level {
       border-radius: 5px;
+      width: 18em;
+      float: right;
 }
 
 .errorlist {
@@ -176,21 +191,23 @@ button.level {
 }
 
 input, textarea {
-      width: 102%;
+      width: 100%;
       padding: 12px 20px;
       margin: 2px 0;
       box-sizing: border-box;
       border-radius: 5px;
+      font-size:15px;
 }
 
 
 input:focus, textarea:focus, select:focus {
   outline: none;
   border: 3px solid #dce0e0;
+  font-size:15px;
 }
 
 button {
-      width: 102%;
+      width: 100%;
       padding: 8px 20px;
       box-sizing: border-box;
       border-radius: 5px;

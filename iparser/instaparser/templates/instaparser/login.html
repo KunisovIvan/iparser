@@ -4,12 +4,11 @@
 {% block content %}
 <h3>Авторизация</h3>
 
-<form method="post">
+<form method="post" class="castom-form">
     {% csrf_token %}
     {{form.as_p}}
 
     <button type="submit"><div class="header__logo">Login</div></button>
     <a href="{% url 'register' %}" class="register__link"><div class="header__logo">Registration</div></a>
 </form>
-<form action="{% url 'register' %}">
 {% endblock %}

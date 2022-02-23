@@ -5,21 +5,24 @@
 
 <div class="content-text">Введите username для парсинга подписчиков</div>
 
-<p>
+
 <form method="post" class="level">
     {% csrf_token %}
-    {{form_username.as_p}}
+    <div>{{form.username}}</div>
+    <div class="form-parse">
+    <div class="type_of_parse">{{form.type_of_parse}}</div>
+    <div class="type_of_parse">{{form.is_parse_new_data}}</div>
+    </div>
     <button type="submit" class="level"><div class="header__logo">START PARSING</div></button>
 </form>
-</p>
 
-{% for key, value in file_list.items %}
+{% for key, value in task_to_file_name_dict.items %}
 
 
             <p>
                 <div class="task-{{ key.status }}">
                         <a class="task-text" href="{{ key.get_absolute_url }}">
-                        {{ key.user_to_scrape}} {{ key.get_status_display}}
+                        {{ key.user_to_scrape}}: {{ key.get_status_display}}
                         </a>
                 </div>
 

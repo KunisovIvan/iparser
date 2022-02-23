@@ -1,9 +1,12 @@
+from datetime import timedelta
+
 import scrapy
+from django.utils import timezone
 from scrapy.http import HtmlResponse
 import re
 import json
 
-from instaparser.models import InstagramAccount
+from instaparser.models import InstagramAccount, TaskForParse
 from scrapy_parser.scrapy_parser.items import ScrapyParserItem
 
 
@@ -14,14 +17,16 @@ class InstagramSpider(scrapy.Spider):
     allowed_domains = ['instagram.com']
     start_urls = ['https://www.instagram.com/']
     login_url = "https://www.instagram.com/accounts/login/ajax/"
+
     # Ограничение instagram на 500 действий в сутки
     count_for_parse = 500
 
-    def __init__(self, user_to_scrape):
+    def __init__(self, user_to_scrape, user):
         super().__init__()
         self.user_to_scrape = user_to_scrape
+        self.user = user
 
-    def parse(self, response: HtmlResponse):
+    def parse(self, response: HtmlResponse, ** kwargs):
 
         username, enc_password = self.select_instagram_account()
         print(username)
@@ -47,18 +52,35 @@ class InstagramSpider(scrapy.Spider):
 
     def user_data_parse(self, response: HtmlResponse):
 
+        task = TaskForParse.objects.filter(user_to_scrape=self.user_to_scrape, user_id=self.user).first()
         user_id = self.fetch_user_id(response.text, self.user_to_scrape)
-        followers_url = (f'https://i.instagram.com/api/v1/friendships/{user_id}/followers/'
-                         f'?count={self.count_for_parse}&search_surface=follow_list_page')
+
+        if task.type_of_parse == TaskForParse.TypeOfParse.FOLLOWERS:
+            url = (f'https://i.instagram.com/api/v1/friendships/{user_id}/followers/'
+                   f'?count={self.count_for_parse}&search_surface=follow_list_page')
+        else:
+            url = (f'https://i.instagram.com/api/v1/friendships/{user_id}/following/'
+                   f'?count={self.count_for_parse}')
+
+        if task.next_max_id:
+            url += f'&max_id={task.next_max_id}'
 
         yield response.follow(
-            followers_url,
+            url,
             callback=self.parse_followers,
         )
 
     def parse_followers(self, response: HtmlResponse):
 
-        followers_pk_list = [i['pk'] for i in response.json()['users']]
+        task = TaskForParse.objects.filter(user_to_scrape=self.user_to_scrape, user_id=self.user).first()
+
+        task.next_max_id = response.json().get('next_max_id', '')
+        task.save()
+
+        username_list = [x.username for x in task.data_from_parse.all()]
+
+        followers_pk_list = [i['pk'] for i in response.json()['users'] if i['username'] not in username_list]
+
         for pk in followers_pk_list:
             follower_to_scrape_url = f'https://i.instagram.com/api/v1/users/{pk}/info/'
             yield response.follow(
@@ -69,7 +91,6 @@ class InstagramSpider(scrapy.Spider):
     def parse_follower(self, response: HtmlResponse):
 
         data = response.json()['user']
-
 
         username = data.get('username')
         full_name = data.get('full_name')
@@ -104,12 +125,15 @@ class InstagramSpider(scrapy.Spider):
             user_to_scrape=self.user_to_scrape,
         )
 
-    def fetch_csrf_token(self, text):
+    @staticmethod
+    def fetch_csrf_token(text):
         """Получаем токен для авторизации."""
+
         matched = re.search('\"csrf_token\":\"\\w+\"', text).group()
         return matched.split(':').pop().replace(r'"', '')
 
-    def fetch_user_id(self, text, username):
+    @staticmethod
+    def fetch_user_id(text, username):
         """Получаем id желаемого пользователя."""
 
         matched = re.search(
@@ -117,18 +141,32 @@ class InstagramSpider(scrapy.Spider):
         ).group()
         return json.loads(matched).get('id')
 
-    def select_instagram_account(self) -> tuple:
+    @staticmethod
+    def fetch_count_followers(text):
+        """Получаем количество подписчиков желаемого пользователя."""
+
+        matched = re.search('\"edge_followed_by\":{\"count\":\d+', text).group()
+        return matched.split(':').pop()
+
+    @staticmethod
+    def select_instagram_account() -> tuple:
         """Получаем учетные данные неиспользованного аккаунта."""
 
         instagram_account = InstagramAccount.objects.filter(is_used=False).first()
         if instagram_account:
             instagram_account.is_used = True
+            instagram_account.used_at = timezone.now()
             instagram_account.save()
         else:
-            InstagramAccount.objects.all().update(is_used=False)
+            time_period = timezone.now() - timedelta(days=1)
+            InstagramAccount.objects.filter(used_at__lt=time_period).update(is_used=False)
             instagram_account = InstagramAccount.objects.filter(is_used=False).first()
-            instagram_account.is_used = True
-            instagram_account.save()
+            if instagram_account:
+                instagram_account.is_used = True
+                instagram_account.used_at = timezone.now()
+                instagram_account.save()
+            else:
+                return '', ''
 
         return instagram_account.username, instagram_account.enc_password
 
